@@ -18,7 +18,7 @@
 plugins {
     id 'java'
     id 'dev.architectury.loom' version '0.10.0-SNAPSHOT'
-    id 'maven-publish'
+    id 'maven'
 }
 
 
