@@ -15,40 +15,10 @@
  * along with Baritone.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-buildscript {
-    repositories {
-        maven {
-            name = 'forge'
-            url = 'http://files.minecraftforge.net/maven'
-        }
-        maven {
-            name = 'impactdevelopment-repo'
-            url = 'https://impactdevelopment.github.io/maven/'
-        }
-        maven {
-            url = 'https://www.dogforce-games.com/maven/'
-        }
-        maven {
-            url = 'https://maven.fabricmc.net/'
-        }
-        maven {
-            url = 'https://libraries.minecraft.net/'
-        }
-        mavenCentral()
-        jcenter()
-    }
-
-    dependencies {
-        classpath group: 'com.github.ImpactDevelopment', name: 'ForgeGradle', version: '3.0.115'
-        classpath group: 'com.github.ImpactDevelopment', name: 'MixinGradle', version: '0.6.2'
-        classpath group: 'net.fabricmc', name: 'fabric-loom', version: '0.5-SNAPSHOT'
-    }
-}
-
 plugins {
     id 'java'
     id 'dev.architectury.loom' version '0.10.0-SNAPSHOT'
-    id 'maven'
+    id 'maven-publish'
 }
 
 archivesBaseName  = project.archives_base_name
@@ -211,25 +181,3 @@ task createDist(type: CreateDistTask, dependsOn: proguard)
 
 
 build.finalizedBy(createDist)
-
-install {
-    def jarApiName = String.format("%s-api-%s", rootProject.name, version.toString())
-    def jarApiForgeName = String.format("%s-api-forge-%s", rootProject.name, version.toString())
-    def jarSAName = String.format("%s-standalone-%s", rootProject.name, version.toString())
-    def jarSAForgeName = String.format("%s-standalone-forge-%s", rootProject.name, version.toString())
-
-    artifacts {
-        archives file("$buildDir/libs/"+jarApiName+".jar")
-        archives file("$buildDir/libs/"+jarApiForgeName+".jar")
-        archives file("$buildDir/libs/"+jarSAName+".jar")
-        archives file("$buildDir/libs/"+jarSAForgeName+".jar")
-    }
-    repositories.mavenInstaller {
-		addFilter('api') { artifact, file -> artifact.name == "baritone-api" }
-		addFilter('api-forge') { artifact, file -> artifact.name == "baritone-api-forge" }
-		addFilter('standalone') { artifact, file -> artifact.name == "baritone-standalone" }
-		addFilter('standalone-forge') { artifact, file -> artifact.name == "baritone-standalone-forge" }
-    }
-}
-
-install.dependsOn(build)
